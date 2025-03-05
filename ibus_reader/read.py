@@ -11,6 +11,11 @@ class IBusReader(Node):
     def __init__(self):
 
         super().__init__('ibus_reader')
+
+        # ibus param, default to AMA0, can be changed through launch args
+        self.declare_parameter("ibus_channel", "/dev/ttyAMA0")
+        ibus_param = self.get_parameter("ibus_channel")
+
         self.pub_1 = self.create_publisher(Int32, 'ch1', 1)
         self.pub_2 = self.create_publisher(Int32, 'ch2', 1)
         self.pub_3 = self.create_publisher(Int32, 'ch3', 1)
@@ -30,7 +35,7 @@ class IBusReader(Node):
         self.ch8 = 0
         
         
-        self.ser = serial.Serial("/dev/ttyAMA0", 115200)
+        self.ser = serial.Serial(ibus_param.value, 115200)
         self.ser.parity = serial.PARITY_NONE
         self.ser.stopbits = serial.STOPBITS_ONE
         self.timer = self.create_timer(0.001, self.timer_callback)
