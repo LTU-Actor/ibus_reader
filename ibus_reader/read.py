@@ -3,6 +3,12 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Int32
 
+def deadzone(raw_value : int, center : int = 1500, deadzone_value : int = 100):
+    if(abs(raw_value - center) <= deadzone_value):
+        return center
+    else:
+        return raw_value
+
 
 
 class IBusReader(Node):
@@ -100,13 +106,13 @@ class IBusReader(Node):
         self.read_serial_data()
         
         msg = Int32()
-        msg.data = self.ch1
+        msg.data = deadzone(self.ch1)
         self.pub_1.publish(msg)
-        msg.data = self.ch2
+        msg.data = deadzone(self.ch2)
         self.pub_2.publish(msg)
-        msg.data = self.ch3
+        msg.data = deadzone(self.ch3)
         self.pub_3.publish(msg)
-        msg.data = self.ch4
+        msg.data = deadzone(self.ch4)
         self.pub_4.publish(msg)
         msg.data = self.ch5
         self.pub_5.publish(msg)
