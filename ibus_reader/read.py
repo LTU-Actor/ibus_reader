@@ -106,13 +106,13 @@ class IBusReader(Node):
         self.read_serial_data()
         
         msg = Int32()
-        msg.data = deadzone(self.ch1)
+        msg.data = deadzone(self.ch1, deadzone_value=50)
         self.pub_1.publish(msg)
         msg.data = deadzone(self.ch2)
         self.pub_2.publish(msg)
         msg.data = deadzone(self.ch3)
         self.pub_3.publish(msg)
-        msg.data = deadzone(self.ch4)
+        msg.data = deadzone(self.ch4 ,deadzone_value=50)
         self.pub_4.publish(msg)
         msg.data = self.ch5
         self.pub_5.publish(msg)
