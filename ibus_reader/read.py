@@ -40,8 +40,14 @@ class IBusReader(Node):
         self.ch7 = 0
         self.ch8 = 0
         
-        
-        self.ser = serial.Serial(ibus_param.value, 115200)
+        serial_connected = False
+        while not serial_connected:
+            try:
+                self.ser = serial.Serial(ibus_param.value, 115200)
+                serial_connected = True
+            except serial.SerialException:
+                self.get_logger().log(f"Waiting for {ibus_param.value}...", 20)
+                
         self.ser.parity = serial.PARITY_NONE
         self.ser.stopbits = serial.STOPBITS_ONE
         self.timer = self.create_timer(0.001, self.timer_callback)
